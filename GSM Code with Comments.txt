@@ -1,0 +1,237 @@
+unsigned long LetInt = 3888000000; //3888000000 milliseconds is equal to 45 days, lettuce harvest time
+unsigned long TogInt=259200000; //259200000 milliseconds is equal to 3 days, toge harvest time
+unsigned long MonthInt=2592000000; //miliseconds in a month 
+unsigned long WeeksInt=604800000; //miliseconds in a week
+int counter=0,i; //counter for looping functions 
+char str[15]; //initializing the length of the string 
+String j=""; //initalizing the string j
+void setup() {
+
+ Serial.begin(9600); //initializes the serial connection at 9600 bits per second
+ delay(2000); //2 seconds delay 
+ Serial.println("AT+CNMI=2,2,0,0,0"); //AT Command to receive a live SMS
+ delay(500); //0.5 milliseconds delay
+ Serial.println("AT+CMGF=1");  //sets the GSM modem in SMS Text Mode
+ delay(1000); //1 second delay
+}
+
+void SendMessage(String j) //Sending Message Function
+{
+ Serial.println("AT+CMGF=1"); //sets the GSM modem in SMS Text Mode
+ delay(1000); //1 second delay         
+ Serial.println("AT+CMGS=\"+639218722006\"\r"); //send SMS Command in Text Mode (+639218722006 is the number of the User/Owner)
+ delay(1000); //1 second delay
+ Serial.println(j);//the SMS text you want to send
+ delay(100); //0.1 seconds delay 
+ Serial.println((char)26); // ASCII code of CTRL+Z
+ delay(1000); //1 second delay
+}
+
+void loop() { 
+ if(counter==1) //if the serialEvent() received a valid code from the user the counter will be equal to 1. if none , counter will remain zero.
+    {
+     check();  //call the check function. Checking the Text Codes
+     counter=0; //counter goes back to 0 after performing the check()
+     //if the counter == 1 it will perform again the loop , so to avoid endless loop we need to change it back to 0 
+     delay(1000); //1 second delay
+     }
+ delay(500); //0.5 seconds delay
+ }
+
+// Checking for message 
+
+void serialEvent() 
+{
+ while(Serial.available()) //if there are characters available in the receive buffer for you to read.
+ {
+   if(Serial.find("#A.")) //check if there is "#A." in the receive buffer               
+     {
+      while (Serial.available()) //there are still characters after "#A." in the receive buffer
+      {
+        char inChar=Serial.read(); //reads the characters after "#A."
+        str[i++]=inChar; //initializing string
+        if(inChar=='*') //Check if there is a "*" in the string
+        {
+       counter=1; //if there is "*" change the counter to 1;
+       return; //return the value and exit the function
+        } 
+      } 
+     }
+  }
+}
+
+// Checking the message code
+
+void check()
+{
+   if(!(strncmp(str,"Test",4))) //code for testing the GSM Module 
+     {     
+     delay(200); //0.2 seconds delay 
+     j="TESTING... 1/5",14; //initializing the message to be received by the user 
+     SendMessage(j); //sending the message to the user
+     delay(10000); //10 seconds delay 
+     j="TESTING... 2/5",14; //initializing the message to be received by the user 
+     SendMessage(j); //sending message to the user
+     delay(10000); //10 seconds delay
+     j="TESTING... 3/5",14; //initializing the message to be received by the user 
+     SendMessage(j); //sending message to the user
+     delay(10000); //10 seconds delay
+     j="TESTING... 4/5",14; //initializing the message to be received by the user 
+     SendMessage(j); //sending message to the user
+      delay(50000); //50 seconds delay 
+     j="TESTING COMPLETE",13; //initializing the message to be received by the user 
+     SendMessage(j); //sending message to the user
+     int m = 0; //initializing local variable m
+     while(m<=2) { //while m <= 2 do the following 
+        j="Ready For Planting";  //initializing the message to be received by the user 
+        SendMessage(j); //send message to the user 
+        m++; //add 1 to the value of m
+     }
+     
+      }
+
+    else if(!(strncmp(str,"Lettuce",7))) //code for lettuce
+      {
+      delay(200); //0.2 seconds delay
+      j="Lettuce Planted";//initializing the message to be received by the user 
+      SendMessage(j); //sending message to the user
+      Serial.println("Wait for harvest time"); //Serial print for monitoring the SMS
+      delay(LetInt); //Time to wait  before sending
+      j="Harvest Time [Lettuce]";//initializing the message to be received by the user 
+      int m = 0; //initializing local variable m
+      while(m<=2){ //while m = 2 do the following
+      SendMessage(j); //send message to the user
+      m++; //add 1 to the value of m
+      }
+      }
+    else if(!(strncmp(str,"Strawberry",10))) // code for strawberry
+      {
+      delay(200); //0.2 seconds delay
+      j="Strawberry Planted"; ////initializing the message to be received by the user 
+      SendMessage(j); //send message to the user
+      Serial.println("Wait for harvest time"); //Serial print for monitoring the SMS
+      i=0; //initializing local variable i;
+      while(i<=1){ //while i is <=1 do the following
+      delay(MonthInt); //wait for 1 month 
+      i++; //add 1 to the value of i;
+      }
+      int m=0; //initializing local variable m
+      while(m<=2){ //while m is <= 2 do the following
+      j="Harvest Time [Strawberry]"; //initializing the message to be received by the user 
+      SendMessage(j); //send message to the user
+      m++;
+      }}
+
+      else if(!(strncmp(str,"Onions",6))) //code for onions
+      {
+      delay(200); //0.2 seocnds delay
+      j="Onions Planted"; //initializing the message to be received by the user 
+      SendMessage(j); //send message to the user
+      Serial.println("Wait for harvest time"); //Serial print for monitoring SMS 
+      i = 0; //initializing local variable i
+      while(i<=2) {  //while i is <= 2 do the following
+         delay(MonthInt); //wait for 1 month
+         i++; //add 1 to the value of i
+      }
+      int w = 0; //initializing local variable w
+      while(w<=1) { //while w is <= 1 do the following
+         delay(WeeksInt); //wait for 1 week
+         w++; //add 1 to the value of w
+      }
+      int m = 0; //initializing local variable m 
+      while(m<=2){ //while m is <= 2 do the following
+         j="Harvest Time [Onions]"; //initializing the message to be received by the user 
+         SendMessage(j); //send message to the user
+         m++; //add 1 to the value of m
+      }
+      }
+
+     else if(!(strncmp(str,"Toge",4))) //code for toge
+      {
+      delay(200); //0.2 seconds delay
+      j="Toge Planted";//initializing the message to be received by the user 
+      SendMessage(j); //send message to the user
+      Serial.println("Wait for harvest time"); //Serial print for monitoring the SMS
+      delay(TogInt); //time to wait before sending
+      int m = 0; //initializing local variable m
+      while(m<=2){ //while m is <=2 do the following
+         j="Harvest Time [Toge]"; //initializing the message to be received by the user 
+         SendMessage(j); //send message to the user
+         m++; //add 1 to the value of m
+      }
+      }
+
+    else if(!(strncmp(str,"Garlic",6))) //code for garlic
+      {
+      delay(200); //0.2 seconds delay 
+      j="Garlic Planted"; //initializing the message to be received by the user 
+      SendMessage(j); //send the message to the user
+      Serial.println("Wait for harvest time"); //Serial print for monitoring the SMS 
+      i = 0; //initializing local variable i
+      while(i<=8){// while i <= 8 do the following
+         delay(MonthInt); //wait for 1 month
+         i++; //add 1 to the value of i
+      }
+      int m = 0; //initializing local variable m
+      while(m<=2){ //while m is <= 2 do the following
+         j="Harvest Time [Garlic]"; //initializing the message to be received by the user 
+         SendMessage(j); //send message to the user
+         m++; //add 1 to the value of m
+      }}
+
+      else if(!(strncmp(str,"Basil",5))) //code for basil
+      {
+      delay(200); //0.2 seconds delay 
+      j="Basil Planted"; //initializing the message to be received by the user 
+      SendMessage(j); //send message to the user
+      Serial.println("Wait for harvest time"); //Serial print for monitoring the SMS
+      i = 0; //initializing local variable i
+      while(i<=1){ //while i is <= 1 do the following
+         delay(MonthInt); //wait for 1 month
+         i++; //add 1 to the value of i
+      }
+      int m = 0; //initializing local variable m
+      while(m<=2){ //while m is <= 2 do the following
+         j="Harvest Time [Basil]"; //initializing local variable m
+         SendMessage(j); //send message to the user
+         m++; //add 1 to the value of m
+      }}
+
+      else if(!(strncmp(str,"Beet",4))) //code for beetroot
+      {
+      delay(200); //0.2 seconds delay 
+      j="Beetroot Planted"; //initializing the message to be received by the user 
+      SendMessage(j); //send message to the user 
+      Serial.println("Wait for harvest time"); //Serial print for monitoring the SMS
+      i = 0; //initializing local variable i
+      while(i<=2) { //while i is <= 2 do the following
+         delay(MonthInt); //wait for 1 month 
+         i++; //add 1 to the value of i
+      }
+      int m = 0; //initializing local variable m
+      while(m<=2){ //while m is <= 2 do the following
+         j="Harvest Time [Beetroot]"; //initializing the message to be received by the user 
+         SendMessage(j); //send message to the user
+         m++; //add 1 value to the of m
+      }
+      }
+
+     else if(!(strncmp(str,"Sonions",7))) //code for string onions
+      {
+      delay(200); //0.2 seconds delay 
+      j="Onions Planted"; //initializing the message to be received by the user 
+      SendMessage(j); //send message to the user 
+      Serial.println("Wait for harvest time"); //Serial print for monitoring SMS
+      i = 0; //initializing local variable i
+      while(i<=2) { //while i <= 2 do the following
+         delay(MonthInt); //wait for 1 month 
+         i++; //add 1 to the value of i
+      }
+      int m = 0; //initializing the value of m
+      while(m<=2){ //while m is <=2 do the following
+         j="Harvest Time [String Onions]"; //initializing the message to be received by the user 
+         SendMessage(j); //send message to the user 
+         m++; //add 1 to the value of m
+      }
+      }    
+}

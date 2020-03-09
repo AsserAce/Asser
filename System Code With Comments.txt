@@ -1,0 +1,245 @@
+//Rotary Garden System Code
+#include "RTClib.h" //library for RTC
+#define Relay1_Light 5 //pin  for the Relay [LIGHT SYSTEM]
+#define TempSensor_Pin A0 //pin  for the Temperature Sensor
+#define Relay2_Water 4 //pin  for the Relay [WATER SYSTEM]
+#define Relay3_Motor 8 //pin  for the Relay [MOTOR]
+float Temp; //initializing variable float Temp 
+RTC_DS3231 rtc; //libray for RTC
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"}; //days of the week 
+
+void setup() {
+  
+  Serial.begin(9600); //starts serial connection with the computer; open on serial monitor
+  delay (3000); //wait for console opening , 3 seconds delay
+  pinMode (TempSensor_Pin, INPUT); //configure TempSensor_Pin as an input 
+  pinMode (Relay1_Light, OUTPUT); //configure Relay1_Light as an output 
+  pinMode (Relay2_Water, OUTPUT); //configure Relay2_Water as an output 
+  pinMode (Relay3_Motor, OUTPUT); //configure Relay3_Motor as an output 
+  digitalWrite (Relay2_Water,HIGH); //configure Relay_Water with a HIGH value to a digital pin 
+  digitalWrite(Relay3_Motor,HIGH); //configure Relay3_Motor with a HIGH value to a digital pin  
+  delay(1000); //1 second delay
+  Serial.println("------------SYSTEM SERIAL MONITOR------------"); //introduction to the Serial Monitor 
+
+  
+  if (! rtc.begin()) { //if rtc fails to begin
+    Serial.println("Couldn't find RTC"); //serial print if rtc fails to begin
+    while (1); //creates a loop to check again the rtc
+  }
+
+  if (rtc.lostPower()) { //if rtc lost power 
+    Serial.println("RTC lost power, lets set the time!"); //serial print if the rtc lost power
+    // Comment out below lines once you set the date & time.
+    // Following line sets the RTC to the date & time this sketch was compiled
+    rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); //adjusting the rtc date and time 
+    // Following line sets the RTC with an explicit date & time
+    // for example to set January 27 2017 at 12:56 you would call:
+    // rtc.adjust(DateTime(2017, 1, 27, 12, 56, 0));
+  }
+}
+
+void loop() {
+  // RTC 
+    DateTime now = rtc.now(); //current time 
+    Serial.println("Current Date & Time: "); //serial print for the current date and time
+    Serial.print(now.hour(), DEC); //serial print for the current hour
+    Serial.print(':'); //separates the current hour from the current minute
+    Serial.print(now.minute(), DEC); //serial print for the current minute
+    Serial.print(':');  //separates the current minute from the current second
+    Serial.print(now.second(), DEC); //serial print for the current second
+    Serial.print(" ");  //space to separate Time and Date
+    Serial.print(now.month(), DEC); //serial print for the current month
+    Serial.print(':'); //separates the current month from the current day
+    Serial.print(now.day(), DEC); //serial print for the current day
+    Serial.print(':'); //separates the current day from the current year
+    Serial.print(now.year(), DEC); //serial print for the current year
+    Serial.print(" ("); //open parenthesis for the current day of the week
+    Serial.print(daysOfTheWeek[now.dayOfTheWeek()]); //serial print for the current day of the week 
+    Serial.print(") "); //close parenthesis for the current day of the week
+    Serial.println(); //space
+    delay(1000); //1 second delay
+    
+//Time for Motor System
+
+  if(now.hour() == 0) //if current hour is 0
+  {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status
+  }
+
+  if(now.hour() == 1) //if current hour is 1
+   {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status
+   }
+ 
+    if(now.hour() == 2) //if current hour is 2
+   {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status
+   }
+
+   if(now.hour() == 3) //if current hour is 3
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status
+  }
+
+  if(now.hour() == 4) //if current hour is 4
+   {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status
+   }
+
+   if(now.hour() == 5) //if current hour is 5
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status 
+  }
+
+  if(now.hour() == 6) //if current hour is 6
+   {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status 
+    
+   }
+
+   if(now.hour() == 7) //if current hour is 7
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status 
+  }
+
+  if(now.hour() == 8) //if current hour is 8
+   {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status 
+   }
+
+   if(now.hour() == 9) //if current hour is 9
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status 
+  }
+
+  if(now.hour() == 10) //if current hour is 10
+   {
+     digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status 
+   }
+
+   if(now.hour() == 11) //if current hour is 11
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status 
+  }
+
+  if(now.hour() == 12) //if current hour is 12
+   {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status  
+   }
+
+   if(now.hour() == 13) //if current hour is 13
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status  
+  }
+
+  if(now.hour() == 14) //if current hour is 14
+   {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status
+   }
+
+   if(now.hour() == 15) //if current hour 15
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status
+  }
+
+  if(now.hour() == 16) //if current hour 16
+   {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status
+   }
+
+   if(now.hour() == 17) //if current hour 17
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status
+  }
+
+  if(now.hour() == 18) //if current hour 18 
+   {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status
+   }
+
+   if(now.hour() == 19) //if current hour 19
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status
+  }
+
+  if(now.hour() == 20) //if current hour 20   
+   {
+    digitalWrite (Relay3_Motor,LOW); //sets the motor value to LOW. Motor is now ON
+    Serial.println ("Motor Status: On"); //serial print for the motor status
+   }
+
+   if(now.hour() == 21) //if current hour 21 
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status
+  }
+
+  if(now.hour() == 22) //if current hour 22
+   {
+   digitalWrite (Relay3_Motor,LOW); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: On"); //serial print for the motor status
+   }
+
+   if(now.hour() == 23) //if current hour 23
+  {
+    digitalWrite (Relay3_Motor,HIGH); //sets the motor value to HIGH. Motor is now OFF
+    Serial.println ("Motor Status: Off"); //serial print for the motor status
+  }
+
+//Light System On / Off
+
+  if ( Temp <= 28) { //check if the temperature is less than 28 since the optimum temperature for plant's photosynthesis is not more 28 degrees celsius
+  digitalWrite (Relay1_Light, HIGH); //turn on the Lighting System
+  Serial.println ("Light Status: On"); //serial print for the lighting system status
+  delay (1000); //1 second delay
+  }
+  else {digitalWrite (Relay1_Light, LOW); //turn off the UV lights [if the temperature is more than 28 degrees celsius , it is more than the optimum temperature]
+  Serial.println ("Light Status: Off"); //serial print for the light status
+  delay (1000); //1 second delay
+  }
+  //Water System
+  if (now.hour() == 8 && now.minute() == 30 && now.second() <=59) //check if the current hour is 8 , minute is 30 , and the second is less than or equal to 59 
+  {
+    digitalWrite (Relay2_Water,LOW); //turn on the Watering System
+    Serial.println ("Water Status: On"); //serial print for the watering system status
+  }
+ if (now.hour() == 8 && now.minute() == 31 && now.second() <=59) //check if the current hour is 8 , minute is 31, and the second is less than or equal to 59 
+  {
+    digitalWrite (Relay2_Water,LOW); //turn on the Watering System
+    Serial.println ("Water Status: On"); //serial print for the watering system status
+  }
+ else {
+      delay(1000); //1 second delay
+      digitalWrite (Relay2_Water,HIGH); //turn off the Watering System
+      Serial.println ("Water Status: Off"); //serial print for the watering system status
+      }
+// Light System Reading 
+  Temp = analogRead(A0); //variable Temp is equal to the data from the analogRead(AO)[Temperature Reading]
+  Temp = Temp * 0.48828125; // Converting Volts to Degrees Celsius
+  Serial.print("Temperature Status: "); //serial print Temperature Status
+  Serial.print ( Temp); //temperature in degrees celsius
+  Serial.print(" Degrees Celsius"); //serial print Degrees Celsius
+  Serial.println();
+  delay (1000);
+  Serial.println("******************************"); //endline 
+}
